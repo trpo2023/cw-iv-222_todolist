@@ -37,7 +37,7 @@ string removeFastTask(string s)
 }
 string completeFastTask(string s)
 {
-	//taskManager.completeFastTask(stoi(s)-1);;
+	//taskManager.completeFastTask(stoi(s)-1);;;
 	return "Задача выполнена!";
 }
 string listFastTask(string s)

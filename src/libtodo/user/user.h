@@ -9,8 +9,6 @@ private:
     inline static Profile *_profile;
 public:
     string name;
-    string login;
-    string pass;
     vector<Task> tasks;
     bool isUserInit;
     

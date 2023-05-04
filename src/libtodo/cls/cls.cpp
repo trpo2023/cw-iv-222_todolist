@@ -11,6 +11,6 @@ string ReadMessage()
 {
     string s;
     cout << "Герой: ";
-    cin >> s;
+    getline(cin, s);
     return s;
 }

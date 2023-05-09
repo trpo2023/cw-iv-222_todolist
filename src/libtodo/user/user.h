@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include <vector>
 using namespace std;
@@ -5,8 +6,6 @@ using namespace std;
 
 class Profile
 {
-private:
-    inline static Profile *_profile;
 public:
     string name;
     vector<Task> tasks;
@@ -16,5 +15,8 @@ public:
 
     void UserInit(string _name);
 
-    static Profile* GetUser();
+    void AddTask(string _label, string text);
+    void RemoveTask(int index);
+    void CompleteTask(int index);
+    void EditTask(int index, string _label, string text);
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <libtodo/user/user.h>
 using namespace std;
 struct Command
 {
@@ -17,4 +18,4 @@ struct Command
 
 void CommandsInit();
 vector<Command> GetListCommands();
-string ExecuteCommand(string str);
+string ExecuteCommand(string str, Profile *p);

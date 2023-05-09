@@ -12,7 +12,7 @@ int main()
         string cmd;
 		cmd = ReadMessage();
 		system("clear");
-		string answer = ExecuteCommand(cmd);
+		string answer = ExecuteCommand(cmd, &p);
 		PrintMessage(answer);
     }
     return 0;

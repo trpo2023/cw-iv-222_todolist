@@ -3,6 +3,7 @@
 using namespace std;
 
 vector<Command> cmdList;
+Profile *now_profile;
 
 string help(string s)
 {
@@ -23,26 +24,55 @@ string help(string s)
 string addFastTask(string s)
 {
 	string n, d;
-	PrintMessage("Название задачи: ");
+	PrintMessage("Введи название задачи");
 	n = ReadMessage();
-	PrintMessage("Описание задачи: ");
+	PrintMessage("Введи описание задачи");
 	d = ReadMessage();
-	//taskManager.addFastTask(n, d);
+	now_profile->AddTask(n, d);
 	return "Задача добавленна!";
 }
 string removeFastTask(string s)
 {
-	//taskManager.removeFastTask(stoi(s));
+	int index = stoi(s);
+	if (0 < index && index < now_profile->tasks.size())
+	{
+		now_profile->RemoveTask(index-1);
+	}
+	else
+	{
+		return "Нет задачи с таким номером!";
+	}
 	return "Задача удалена!";
 }
 string completeFastTask(string s)
 {
-	//taskManager.completeFastTask(stoi(s)-1);
+	int index = stoi(s);
+	if (0 < index && index < now_profile->tasks.size())
+	{
+		now_profile->CompleteTask(index-1);
+	}
+	else
+	{
+		return "Нет задачи с таким номером!";
+	}
 	return "Задача выполнена!";
 }
 string listFastTask(string s)
 {
-	return "List";//taskManager.getListAllFastTasks();
+	string list = "\n";
+	int i = 0;
+	for (auto task : now_profile->tasks)
+	{
+		string f = "[-]";
+		if (task.isComplete)
+			f = "[+]";
+		list += to_string(++i) + ") " + f + "\nНазвание: " + task.label + "\nОписание: " + task.description + "\n";
+	}
+	if (i == 0)
+	{
+		list += "Сейчас у вас нет заданий.\n";
+	}
+	return list;
 }
 string quit(string s)
 {
@@ -81,14 +111,14 @@ void CommandsInit()
 	cmdList.push_back(Command({"cloud", "cl"}, "Создать аккаунт в сети", create_account));
 }
 
-string ExecuteCommand(string str)
+string ExecuteCommand(string str, Profile *p)
 {
 	if (cmdList.size() == 0)
 	{
 		CommandsInit();
 	}
     string result = "Прости меня, я не понимаю что ты хочешь.\n Ты можешь написать aa и узнать что я точно смогу сделать!";
-	
+	now_profile = p;
 	for (Command cmd : cmdList)
 	{
 		for (string c : cmd.cmds)

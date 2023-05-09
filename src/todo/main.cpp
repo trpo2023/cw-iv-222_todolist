@@ -5,7 +5,7 @@ using namespace std;
 int main()
 {
     Profile p;
-    p.UserInit("Данил");
+    p.UserInit("Danil");
     bool isActive = true;
     while (isActive)
     {

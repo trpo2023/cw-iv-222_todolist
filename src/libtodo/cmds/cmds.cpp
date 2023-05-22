@@ -33,7 +33,7 @@ string addFastTask(string s)
 }
 string removeFastTask(string s)
 {
-	int index = stoi(s);
+	long unsigned int index = stoi(s);
 	if (0 < index && index < now_profile->tasks.size())
 	{
 		now_profile->RemoveTask(index-1);
@@ -46,7 +46,7 @@ string removeFastTask(string s)
 }
 string completeFastTask(string s)
 {
-	int index = stoi(s);
+	long unsigned int index = stoi(s);
 	if (0 < index && index < now_profile->tasks.size())
 	{
 		now_profile->CompleteTask(index-1);

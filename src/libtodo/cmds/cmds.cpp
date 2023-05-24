@@ -5,6 +5,16 @@ using namespace std;
 vector<Command> cmdList;
 Profile* now_profile;
 
+bool IsArgNumber(string s)
+{
+    for (size_t i = 0; i < s.size(); i++) {
+        if (!isdigit(s[i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
 string help(string s)
 {
     string list = "";
@@ -32,6 +42,10 @@ string addFastTask(string s)
 }
 string removeFastTask(string s)
 {
+    if (!IsArgNumber(s)) {
+        return "Неподходящий аргумент. Вы должны указать номер задачи после "
+               "команды.";
+    }
     long unsigned int index = stoi(s);
     if (0 < index && index <= now_profile->tasks.size()) {
         now_profile->RemoveTask(index - 1);
@@ -42,6 +56,10 @@ string removeFastTask(string s)
 }
 string completeFastTask(string s)
 {
+    if (!IsArgNumber(s)) {
+        return "Неподходящий аргумент. Вы должны указать номер задачи после "
+               "команды.";
+    }
     long unsigned int index = stoi(s);
     if (0 < index && index < now_profile->tasks.size()) {
         now_profile->CompleteTask(index - 1);

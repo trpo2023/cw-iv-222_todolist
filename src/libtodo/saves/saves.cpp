@@ -2,12 +2,12 @@
 #include <libtodo/json/json.hpp>
 #include <libtodo/saves/saves.h>
 using json = nlohmann::json;
-
+#define SAVE_FILE_NAME ".saves.save"
 json j;
 
 void LoadSaves()
 {
-    ifstream SaveFile("saves.save");
+    ifstream SaveFile(SAVE_FILE_NAME);
 
     try {
         j = json::parse(SaveFile);
@@ -19,7 +19,7 @@ void LoadSaves()
 
 void SetSave(string key, string value)
 {
-    ofstream SaveFile("saves.save");
+    ofstream SaveFile(SAVE_FILE_NAME);
 
     j[key] = value;
     SaveFile << j.dump();

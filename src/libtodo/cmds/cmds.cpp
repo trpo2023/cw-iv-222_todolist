@@ -1,5 +1,7 @@
+#include <libtodo/cloud/cloud.h>
 #include <libtodo/cls/cls.h>
 #include <libtodo/cmds/cmds.h>
+#include <libtodo/saves/saves.h>
 using namespace std;
 
 vector<Command> cmdList;
@@ -61,7 +63,7 @@ string completeFastTask(string s)
                "команды.";
     }
     long unsigned int index = stoi(s);
-    if (0 < index && index < now_profile->tasks.size()) {
+    if (0 < index && index <= now_profile->tasks.size()) {
         now_profile->CompleteTask(index - 1);
     } else {
         return "Нет задачи с таким номером!";
@@ -96,15 +98,31 @@ string clear(string s)
 }
 string create_account(string s)
 {
-    string email, pass;
-    PrintMessage("Введите вашу почту: ");
-    email = ReadMessage();
+    string log, pass;
+    PrintMessage("Введите ваш логин: ");
+    log = ReadMessage();
 
-    PrintMessage("Создайте пароль: ");
+    PrintMessage("Введите пароль: ");
     pass = ReadMessage();
 
-    // Сделать здесь как надо
-    return "Аккаунт создан!";
+    if (log.find(" ") == string::npos && pass.find(" ") == string::npos) {
+        SetSave("UserLogin", log);
+        SetSave("UserPassword", pass);
+        string response = GetUrlResponse(GET_INFO_LOGPAS(log, pass));
+        if (response == "ERROR") {
+            return "Аккаунт создан!";
+        } else if (response == "FAIL") {
+            return "Аккаунт с таким логином существует, однако пароль не "
+                   "верный";
+        } else {
+            DownloadSaves(log, pass);
+            LoadSaves();
+            now_profile->LoadUser();
+            return "Вход выполнен успешно!";
+        }
+    } else {
+        return "Логин и пароль должен состоять из латинских символов и цифр";
+    }
 }
 
 void CommandsInit()
@@ -126,8 +144,8 @@ void CommandsInit()
                     "Выводит список всех задач",
                     listFastTask));
     cmdList.push_back(Command({"c", "clear"}, "Очищает консоль", clear));
-    cmdList.push_back(
-            Command({"cloud", "cl"}, "Создать аккаунт в сети", create_account));
+    cmdList.push_back(Command(
+            {"cloud", "cl"}, "Создать или войти в аккаунт", create_account));
 }
 
 string ExecuteCommand(string str, Profile* p)

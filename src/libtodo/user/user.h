@@ -20,6 +20,6 @@ public:
     void RemoveTask(int index);
     void CompleteTask(int index);
     void EditTask(int index, string _label, string text);
-    void SaveTasks();
-    void LoadTasks();
+    void SaveUser();
+    void LoadUser();
 };

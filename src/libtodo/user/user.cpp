@@ -28,7 +28,7 @@ void Profile::EditTask(int index, string _label, string _text)
     tasks.emplace(tasks.cbegin() + (index - 1), Task(_label, _text));
 }
 
-void Profile::SaveTasks()
+void Profile::SaveUser()
 {
     SetSave("name", name);
     SetSave("isUserInit", to_string(isUserInit));
@@ -42,12 +42,13 @@ void Profile::SaveTasks()
     SetSave("tasks", j.dump());
 }
 
-void Profile::LoadTasks()
+void Profile::LoadUser()
 {
+    tasks.clear();
+    name = GetSave("name");
     json j = json::parse(GetSave("tasks"));
     size_t countTasks = stoi(GetSave("countTasks"));
     for (size_t i = 0; i < countTasks; i++) {
         tasks.push_back(Task(j[i]["label"], j[i]["descr"], j[i]["isComplete"]));
     }
-    SetSave("tasks", j.dump());
 }

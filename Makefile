@@ -3,9 +3,9 @@ LIB_NAME = libtodo
 TEST_NAME = todo_test
 
 CFLAGS = -Wall -Wextra -Werror -Wno-unused-parameter
-CPPFLAGS = -I src -I thirdparty -MP -MMD -g
+CPPFLAGS = -I src -I thirdparty -MP -MMD -g 
 LDFLAGS = 
-LDLIBS = -lm -lstdc++
+LDLIBS = -lm -lstdc++ -lboost_system -lboost_thread -lpthread
 
 BIN_DIR = bin
 OBJ_DIR = obj

@@ -14,41 +14,46 @@ namespace http = boost::beast::http;
 
 string GetUrlResponse(string request, string post_string)
 {
-    boost::asio::io_context io;
-    boost::asio::ip::tcp::resolver resolver(io);
-    boost::asio::ip::tcp::socket socket(io);
+    try {
+        boost::asio::io_context io;
+        boost::asio::ip::tcp::resolver resolver(io);
+        boost::asio::ip::tcp::socket socket(io);
 
-    boost::asio::connect(
-            socket, resolver.resolve(IP_ADDR_REST_API_SERVER, BASE_PORT));
+        boost::asio::connect(
+                socket, resolver.resolve(IP_ADDR_REST_API_SERVER, BASE_PORT));
 
-    http::request<http::string_body> req;
+        http::request<http::string_body> req;
 
-    if (post_string == "") {
-        req = http::request<http::string_body>(http::verb::get, request, 3);
-    } else {
-        req = http::request<http::string_body>(http::verb::post, request, 3);
+        if (post_string == "") {
+            req = http::request<http::string_body>(http::verb::get, request, 3);
+        } else {
+            req = http::request<http::string_body>(
+                    http::verb::post, request, 3);
+        }
+
+        req.set(http::field::host, IP_ADDR_REST_API_SERVER);
+        req.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
+
+        if (post_string != "") {
+            req.set(http::field::content_type, "text/plain");
+            req.body() = post_string;
+            req.prepare_payload();
+        }
+
+        http::write(socket, req);
+
+        string response;
+        {
+            boost::beast::flat_buffer buffer;
+            http::response<http::dynamic_body> res;
+            http::read(socket, buffer, res);
+            response = boost::beast::buffers_to_string(res.body().data());
+        }
+        socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
+        return response;
+    } catch (exception e) {
+        return "ERROR";
     }
-
-    req.set(http::field::host, IP_ADDR_REST_API_SERVER);
-    req.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
-
-    if (post_string != "") {
-        req.set(http::field::content_type, "text/plain");
-        req.body() = post_string;
-        req.prepare_payload();
-    }
-
-    http::write(socket, req);
-
-    string response;
-    {
-        boost::beast::flat_buffer buffer;
-        http::response<http::dynamic_body> res;
-        http::read(socket, buffer, res);
-        response = boost::beast::buffers_to_string(res.body().data());
-    }
-    socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
-    return response;
 }
 
 string GetUrlResponse(string request)

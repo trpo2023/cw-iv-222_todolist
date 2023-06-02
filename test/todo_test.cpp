@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <libtodo/cloud/cloud.h>
 #include <libtodo/cmds/cmds.h>
 #include <libtodo/user/user.h>
 
@@ -46,5 +47,42 @@ CTEST(TEST_todo_functions, text_to_add_task_with_any_simbols)
     string dscr
             = "ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqastuvwxyz!@#$%&*()";
     p.AddTask(lbl, dscr);
-    ASSERT_EQUAL(1, p.tasks[0].label == lbl && p.tasks[0].description == dscr);
+    ASSERT_STR(lbl.c_str(), p.tasks[0].label.c_str());
+    ASSERT_STR(dscr.c_str(), p.tasks[0].description.c_str());
+}
+
+CTEST(TEST_todo_functions, test_cloud_system)
+{
+    string log = "anyLoginusahdfiusad8asdf89a"; // Случайный логин
+    string pass = "anyPasswordkasmlgmalkslkaksdfpasodkf"; // Случайный пароль
+
+    string res = GetUrlResponse(GET_INFO_LOGPAS(log, pass));
+    ASSERT_EQUAL(
+            1,
+            res == "ERROR"
+                    || res == "FAIL"); // Выдаёт ERROR - если нет аккаунта.
+                                       // Выдаёт FAIL, если аккаунт есть, но
+                                       // пароль не правильный
+}
+
+CTEST(TEST_full_user_command_emulate, test_without_cloud)
+{
+    Profile p = Profile();
+    p.UserInit("Danil");
+    string t1 = "Task 1!", d1 = "Description 1!";
+    p.AddTask(t1, d1);
+    string t2 = "2!", d2 = "2!";
+    p.AddTask(t2, d2);
+    string t3 = "Задание 3;", d3 = "Описание 3{}";
+    p.AddTask(t3, d3);
+    p.CompleteTask(2);
+    p.RemoveTask(1);
+
+    ASSERT_EQUAL(2, p.tasks.size());
+
+    ASSERT_STR("Task 1!", p.tasks[0].label.c_str());
+    ASSERT_STR("Description 1!", p.tasks[0].description.c_str());
+
+    ASSERT_STR("Задание 3;", p.tasks[1].label.c_str());
+    ASSERT_STR("Описание 3{}", p.tasks[1].description.c_str());
 }

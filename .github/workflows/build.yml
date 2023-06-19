@@ -8,7 +8,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        
+      - name: Download and install Boost
+        uses: MarkusJx/install-boost@v1.71.0
 
+        
       - name: Build application
         run: make
 

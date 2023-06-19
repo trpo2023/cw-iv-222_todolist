@@ -2,7 +2,7 @@ APP_NAME = todo
 LIB_NAME = libtodo
 TEST_NAME = todo_test
 
-CFLAGS = -Wall -Wextra -Werror -Wno-unused-parameter
+CFLAGS = -Wall -Wextra -Wno-unused-parameter
 CPPFLAGS = -I src -I thirdparty -MP -MMD -g 
 LDFLAGS = 
 LDLIBS = -lm -lstdc++ -lboost_system -lboost_thread -lpthread

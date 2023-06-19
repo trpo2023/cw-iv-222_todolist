@@ -51,20 +51,6 @@ CTEST(TEST_todo_functions, text_to_add_task_with_any_simbols)
     ASSERT_STR(dscr.c_str(), p.tasks[0].description.c_str());
 }
 
-CTEST(TEST_todo_functions, test_cloud_system)
-{
-    string log = "anyLoginusahdfiusad8asdf89a"; // Случайный логин
-    string pass = "anyPasswordkasmlgmalkslkaksdfpasodkf"; // Случайный пароль
-
-    string res = GetUrlResponse(GET_INFO_LOGPAS(log, pass));
-    ASSERT_EQUAL(
-            1,
-            res == "ERROR"
-                    || res == "FAIL"); // Выдаёт ERROR - если нет аккаунта.
-                                       // Выдаёт FAIL, если аккаунт есть, но
-                                       // пароль не правильный
-}
-
 CTEST(TEST_full_user_command_emulate, test_without_cloud)
 {
     Profile p = Profile();

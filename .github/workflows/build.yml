@@ -1,0 +1,22 @@
+name: Build
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+        
+      - name: Download and install Boost
+        run: sudo apt-get install libboost-all-dev
+        
+      - name: Build application
+        run: make
+
+      - name: Build test
+        run: make test
+
+      - name: Run tests
+        run: make run_test
